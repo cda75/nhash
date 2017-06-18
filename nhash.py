@@ -5,7 +5,6 @@ from datetime import datetime
 apiUrl = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
 btcAddr = '1LoLs9AQvYzccVbvifj5pCXhfcJZx8tXWB'
-nhashFile = 'nhash.csv'
 algos = {'Scrypt' : 0,
         'SHA256' : 1,
         'ScryptNf' : 2,
@@ -40,17 +39,18 @@ req = requests.get(apiUrl, params=payload)
 reqResult = req.json()['result']
 workers = reqResult['workers']
 totalHash = 0.0
-checkDate = datetime.now().strftime('%d.%m.%Y')
+checkDate = datetime.now().strftime('%d.%m.%y')
 checkTime = datetime.now().strftime('%H:%M')
 
 for w in workers:
     if w[1]:
+    	workerName = w[0]
     	workerHash = float(w[1]['a'])
-        workerName = w[0]
         totalHash += workerHash
-        with open(nhashFile,'a') as f:
+        workerFile = workerName + '.csv'
+        with open(workerFile,'a') as f:
         	writer = csv.writer(f)
-        	writer.writerow((workerName, workerHash, checkDate, checkTime))
+        	writer.writerow((workerHash, checkDate, checkTime))
         print workerName,'\t', workerHash
 
 print totalHash
