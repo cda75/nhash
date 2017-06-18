@@ -1,8 +1,11 @@
 import requests
+import csv
+from datetime import datetime
 
-url = 'https://api.nicehash.com/api'
+apiUrl = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
 btcAddr = '1LoLs9AQvYzccVbvifj5pCXhfcJZx8tXWB'
+nhashFile = 'nhash.csv'
 algos = {'Scrypt' : 0,
         'SHA256' : 1,
         'ScryptNf' : 2,
@@ -33,16 +36,36 @@ algos = {'Scrypt' : 0,
         'Sia' : 27 }
 
 payload = {'method':method, 'addr':btcAddr, 'algo':algos['CryptoNight']}
-req = requests.get(url, params=payload)
-rez = req.json()['result']
-workers = rez['workers']
-total = 0.0
+req = requests.get(apiUrl, params=payload)
+reqResult = req.json()['result']
+workers = reqResult['workers']
+totalHash = 0.0
+checkDate = datetime.now().strftime('%d.%m.%Y')
+checkTime = datetime.now().strftime('%H:%M')
+
 for w in workers:
     if w[1]:
-        total = total + float(w[1]['a'])
-        print w[0],'\t\t',w[1]['a']
+    	workerHash = float(w[1]['a'])
+        workerName = w[0]
+        totalHash += workerHash
+        with open(nhashFile,'a') as f:
+        	writer = csv.writer(f)
+        	writer.writerow((workerName, workerHash, checkDate, checkTime))
+        print workerName,'\t', workerHash
 
-print '\nTotal:\t\t', total
+print totalHash
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
