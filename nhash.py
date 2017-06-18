@@ -1,6 +1,7 @@
 import requests
 import csv
 from datetime import datetime
+import matplotlib.pyplot as plt
 
 apiUrl = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
@@ -42,30 +43,29 @@ totalHash = 0.0
 checkDate = datetime.now().strftime('%d.%m.%y')
 checkTime = datetime.now().strftime('%H:%M')
 
-for w in workers:
-    if w[1]:
-    	workerName = w[0]
-    	workerHash = float(w[1]['a'])
-        totalHash += workerHash
-        workerFile = workerName + '.csv'
-        with open(workerFile,'a') as f:
+def collect_data():
+    for w in workers:
+        if w[1]:
+    	    workerName = w[0]
+    	    workerHash = float(w[1]['a'])
+            totalHash += workerHash
+            workerFile = workerName + '.csv'
+            with open(workerFile,'a') as f:
         	writer = csv.writer(f)
         	writer.writerow((workerHash, checkDate, checkTime))
-        print workerName,'\t', workerHash
+            print workerName,'\t', workerHash
+    with open('total.csv', 'a') as f:
+        write = csv.writer(f)
+        writer.writerow((totalHash, checkDate, checkTime))
 
-print totalHash
-
-
-
-
-
-
+def plot_data(worker):
+    print 'Not ready yet!'
 
 
 
+plot_data('frr')
 
 
-
-
-
+if __name__ == 'main':
+    collect_data()
 
