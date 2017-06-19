@@ -1,12 +1,14 @@
 import requests
 import csv
 from datetime import datetime
+import os
 
 
-apiUrl = 'https://api.nicehash.com/api'
+API_URL = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
 BTC = '1LoLs9AQvYzccVbvifj5pCXhfcJZx8tXWB'
-algos = {'Scrypt' : 0,
+APP_DIR = '/usr/local/nhash'
+ALGOS = {'Scrypt' : 0,
         'SHA256' : 1,
         'ScryptNf' : 2,
         'X11' : 3,
@@ -37,25 +39,28 @@ algos = {'Scrypt' : 0,
 
 
 def collect_data(btcAddr):
-    payload = {'method':method, 'addr':btcAddr, 'algo':algos['CryptoNight']}
-    req = requests.get(apiUrl, params=payload)
+    payload = {'method':method, 'addr':btcAddr, 'algo':ALGOS['CryptoNight']}
+    req = requests.get(API_URL, params=payload)
     reqResult = req.json()['result']
     workers = reqResult['workers']
     totalHash = 0.0
     checkDate = datetime.now().strftime('%d.%m.%y')
     checkTime = datetime.now().strftime('%H:%M')
+    filepath = os.path.join('c:/your/full/path', 'filename')
+    if not os.path.exists(APP_DIR):
+        os.makedirs(APP_DIR)
     for w in workers:
         if w[1]:
     	    workerName = w[0]
     	    workerHash = float(w[1]['a'])
             totalHash += workerHash
             workerFile = workerName + '.csv'
-            with open(workerFile,'a') as f:
+            with open(os.path.join(APP_DIR, workerFile), 'a') as f:
         	writer = csv.writer(f)
         	writer.writerow((workerHash, checkDate, checkTime))
             print workerName,'\t', workerHash
     print '\nTotal: %s H/s' %totalHash
-    with open('total.csv','a') as f:
+    with open(os.path.join(APP_DIR, 'total.csv'), 'a') as f:
         writer = csv.writer(f)
         writer.writerow((totalHash, checkDate, checkTime))
 
