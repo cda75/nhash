@@ -3,11 +3,11 @@ import csv
 from datetime import datetime
 import os
 
-
 API_URL = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
 BTC = '1LoLs9AQvYzccVbvifj5pCXhfcJZx8tXWB'
 APP_DIR = '/usr/local/nhash'
+DATA_DIR = '/usr/local/nhash/data'
 ALGOS = {'Scrypt' : 0,
         'SHA256' : 1,
         'ScryptNf' : 2,
@@ -46,20 +46,20 @@ def collect_data(btcAddr):
     totalHash = 0.0
     checkDate = datetime.now().strftime('%d.%m.%y')
     checkTime = datetime.now().strftime('%H:%M')
-    if not os.path.exists(APP_DIR):
-        os.makedirs(APP_DIR)
+    if not os.path.exists(DATA_DIR):
+        os.makedirs(DATA_DIR)
     for w in workers:
         if w[1]:
     	    workerName = w[0]
     	    workerHash = float(w[1]['a'])
             totalHash += workerHash
             workerFile = workerName + '.csv'
-            with open(os.path.join(APP_DIR, workerFile), 'a') as f:
+            with open(os.path.join(DATA_DIR, workerFile), 'a') as f:
         	writer = csv.writer(f)
         	writer.writerow((workerHash, checkDate, checkTime))
             print workerName,'\t', workerHash
     print '\nTotal: %s H/s' %totalHash
-    with open(os.path.join(APP_DIR, 'total.csv'), 'a') as f:
+    with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
         writer = csv.writer(f)
         writer.writerow((totalHash, checkDate, checkTime))
 
