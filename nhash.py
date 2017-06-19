@@ -44,8 +44,7 @@ def collect_data(btcAddr):
     reqResult = req.json()['result']
     workers = reqResult['workers']
     totalHash = 0.0
-    checkDate = datetime.now().strftime('%d.%m.%y')
-    checkTime = datetime.now().strftime('%H:%M')
+    checkDate = datetime.now().strftime('%d.%m %H:%M')
     if not os.path.exists(DATA_DIR):
         os.makedirs(DATA_DIR)
     for w in workers:
@@ -56,12 +55,12 @@ def collect_data(btcAddr):
             workerFile = workerName + '.csv'
             with open(os.path.join(DATA_DIR, workerFile), 'a') as f:
         	writer = csv.writer(f)
-        	writer.writerow((workerHash, checkDate, checkTime))
+        	writer.writerow((workerHash, checkDatee))
             print workerName,'\t', workerHash
     print '\nTotal: %s H/s' %totalHash
     with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
         writer = csv.writer(f)
-        writer.writerow((totalHash, checkDate, checkTime))
+        writer.writerow((totalHash, checkDate))
 
 
 
