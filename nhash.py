@@ -1,11 +1,11 @@
 import requests
 import csv
 from datetime import datetime
-import matplotlib.pyplot as plt
+
 
 apiUrl = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
-btcAddr = '1LoLs9AQvYzccVbvifj5pCXhfcJZx8tXWB'
+BTC = '1LoLs9AQvYzccVbvifj5pCXhfcJZx8tXWB'
 algos = {'Scrypt' : 0,
         'SHA256' : 1,
         'ScryptNf' : 2,
@@ -35,15 +35,15 @@ algos = {'Scrypt' : 0,
         'X11Gost' : 26,
         'Sia' : 27 }
 
-payload = {'method':method, 'addr':btcAddr, 'algo':algos['CryptoNight']}
-req = requests.get(apiUrl, params=payload)
-reqResult = req.json()['result']
-workers = reqResult['workers']
-totalHash = 0.0
-checkDate = datetime.now().strftime('%d.%m.%y')
-checkTime = datetime.now().strftime('%H:%M')
 
-def collect_data():
+def collect_data(btcAddr):
+    payload = {'method':method, 'addr':btcAddr, 'algo':algos['CryptoNight']}
+    req = requests.get(apiUrl, params=payload)
+    reqResult = req.json()['result']
+    workers = reqResult['workers']
+    totalHash = 0.0
+    checkDate = datetime.now().strftime('%d.%m.%y')
+    checkTime = datetime.now().strftime('%H:%M')
     for w in workers:
         if w[1]:
     	    workerName = w[0]
@@ -58,14 +58,9 @@ def collect_data():
         write = csv.writer(f)
         writer.writerow((totalHash, checkDate, checkTime))
 
-def plot_data(worker):
-    print 'Not ready yet!'
 
-
-
-plot_data('frr')
 
 
 if __name__ == 'main':
-    collect_data()
+    collect_data(BTC)
 
