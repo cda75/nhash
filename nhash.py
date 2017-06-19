@@ -54,13 +54,13 @@ def collect_data(btcAddr):
         	writer = csv.writer(f)
         	writer.writerow((workerHash, checkDate, checkTime))
             print workerName,'\t', workerHash
-    with open('total.csv', 'a') as f:
-        write = csv.writer(f)
+    print '\nTotal: %s H/s' %totalHash
+    with open('total.csv','a') as f:
+        writer = csv.writer(f)
         writer.writerow((totalHash, checkDate, checkTime))
 
 
 
-
-if __name__ == 'main':
+if __name__ == '__main__':
     collect_data(BTC)
 
