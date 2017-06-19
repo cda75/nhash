@@ -46,7 +46,6 @@ def collect_data(btcAddr):
     totalHash = 0.0
     checkDate = datetime.now().strftime('%d.%m.%y')
     checkTime = datetime.now().strftime('%H:%M')
-    filepath = os.path.join('c:/your/full/path', 'filename')
     if not os.path.exists(APP_DIR):
         os.makedirs(APP_DIR)
     for w in workers:
