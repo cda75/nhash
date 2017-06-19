@@ -55,7 +55,7 @@ def collect_data(btcAddr):
             workerFile = workerName + '.csv'
             with open(os.path.join(DATA_DIR, workerFile), 'a') as f:
         	writer = csv.writer(f)
-        	writer.writerow((workerHash, checkDatee))
+        	writer.writerow((workerHash, checkDate))
             print workerName,'\t', workerHash
     print '\nTotal: %s H/s' %totalHash
     with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
