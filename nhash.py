@@ -2,6 +2,7 @@ import requests
 import csv
 from datetime import datetime
 import os
+from statsd import StatsClient
 
 API_URL = 'https://api.nicehash.com/api'
 method = 'stats.provider.workers'
@@ -51,6 +52,8 @@ def collect_data(btcAddr):
         if w[1]:
     	    workerName = w[0]
     	    workerHash = float(w[1]['a'])
+            stats = StatsClient(prefix=workerName)
+            stats.gauge(workerHash, workerName)
             totalHash += workerHash
             workerFile = workerName + '.csv'
             with open(os.path.join(DATA_DIR, workerFile), 'a') as f:
@@ -61,7 +64,6 @@ def collect_data(btcAddr):
     with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
         writer = csv.writer(f)
         writer.writerow((totalHash, checkDate))
-
 
 
 if __name__ == '__main__':
