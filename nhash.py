@@ -61,6 +61,7 @@ def collect_data(btcAddr):
 #       	writer.writerow((workerHash, checkDate))
             print workerName,'\t', workerHash
     print '\nTotal: %s H/s' %totalHash
+    stats.gauge('Total', totalHash)
 #   with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
 #       writer = csv.writer(f)
 #        writer.writerow((totalHash, checkDate))
