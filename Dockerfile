@@ -7,12 +7,11 @@ RUN apk add --update git python py-pip rrdtool rrdcollect py-rrd tzdata lighttpd
 
 WORKDIR /usr/local
 RUN git clone https://github.com/cda75/nhash 
-RUN touch crontab.tmp \
+#RUN touch crontab.tmp \
     && echo '*/1 * * * * /usr/bin/python /usr/local/nhash/nhash.py > /dev/null' > crontab.tmp \
     && crontab crontab.tmp \
     && rm -rf crontab.tmp
 
-#ADD init.sh /usr/local/nhash
 RUN echo "It works!!" > /var/www/localhost/htdocs/index.html
 RUN mkdir -p /etc/lighttpd/lighttpd.conf.d/ && \
     touch /etc/lighttpd/lighttpd.conf.d/empty && \

@@ -46,24 +46,24 @@ def collect_data(btcAddr):
     workers = reqResult['workers']
     totalHash = 0.0
     checkDate = datetime.now().strftime('%d.%m %H:%M')
-    if not os.path.exists(DATA_DIR):
-        os.makedirs(DATA_DIR)
+#    if not os.path.exists(DATA_DIR):
+#        os.makedirs(DATA_DIR)
     for w in workers:
         if w[1]:
     	    workerName = w[0]
     	    workerHash = float(w[1]['a'])
-            stats = StatsClient(prefix=workerName)
-            stats.gauge(workerHash, workerName)
+            stats = StatsClient(prefix='nhash', port=8125)
+            stats.gauge(workerName, workerHash)
             totalHash += workerHash
-            workerFile = workerName + '.csv'
-            with open(os.path.join(DATA_DIR, workerFile), 'a') as f:
-        	writer = csv.writer(f)
-        	writer.writerow((workerHash, checkDate))
+#            workerFile = workerName + '.csv'
+#           with open(os.path.join(DATA_DIR, workerFile), 'a') as f:
+#       	writer = csv.writer(f)
+#       	writer.writerow((workerHash, checkDate))
             print workerName,'\t', workerHash
     print '\nTotal: %s H/s' %totalHash
-    with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
-        writer = csv.writer(f)
-        writer.writerow((totalHash, checkDate))
+#   with open(os.path.join(DATA_DIR, 'total.csv'), 'a') as f:
+#       writer = csv.writer(f)
+#        writer.writerow((totalHash, checkDate))
 
 
 if __name__ == '__main__':
